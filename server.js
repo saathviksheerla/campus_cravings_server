@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const User = require('./models/User.js');
+const Menu = require('./models/Menu.js');
+const Order = require('./models/Order.js')
+const ordersRouter = require('./routes/orders');
+
 require('dotenv').config();
 
 const app = express();
@@ -123,7 +128,7 @@ app.get('/api/users/me', authenticateToken, async (req, res) => {
 app.get('/api/menu', async (req, res) => {
   try {
     console.log('Fetching menu items...');
-    const menuItems = await MenuItem.find({ available: true });
+    const menuItems = await Menu.find({ available: true });
     console.log('Found menu items:', menuItems);
     res.json(menuItems);
   } catch (error) {
@@ -137,7 +142,7 @@ app.post('/api/menu', authenticateToken, async (req, res) => {
     if (req.user.role !== 'admin' && req.user.role !== 'staff') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
-    const menuItem = await MenuItem.create(req.body);
+    const menuItem = await Menu.create(req.body);
     res.status(201).json(menuItem);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -150,7 +155,7 @@ app.post('/api/orders', authenticateToken, async (req, res) => {
     const { items } = req.body;
     let totalAmount = 0;
     const orderItems = await Promise.all(items.map(async (item) => {
-      const menuItem = await MenuItem.findById(item.menuItemId);
+      const menuItem = await Menu.findById(item.menuItemId);
       if (!menuItem || !menuItem.available) {
         throw new Error(`Item ${menuItem?.name || 'unknown'} is not available`);
       }
@@ -184,6 +189,8 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Something went wrong!' });
 });
+
+app.use('/api/orders', authenticateToken, ordersRouter);
 
 // Start server
 const PORT = process.env.PORT || 3000;

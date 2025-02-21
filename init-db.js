@@ -35,7 +35,7 @@ const menuItemSchema = new mongoose.Schema({
 const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [{
-    menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem' },
+    menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
     name: { type: String, required: true } // Denormalized for order history
@@ -62,18 +62,18 @@ orderSchema.index({ pickupCode: 1 }, { unique: true });
 
 // Create models
 const User = mongoose.model('User', userSchema);
-const MenuItem = mongoose.model('MenuItem', menuItemSchema);
+const Menu = mongoose.model('Menu', menuItemSchema);
 const Order = mongoose.model('Order', orderSchema);
 
 // Sample test data
 const testUsers = [
   {
-    name: 'John Student',
-    email: 'john@college.edu',
+    name: 'ram',
+    email: 'ram@clg.edu',
     phone: '1234567890',
     collegeId: 'STU001',
     role: 'student',
-    password: 'hashedpassword123', // In real app, use bcrypt
+    password: '1234', // In real app, use bcrypt
     balance: 500
   },
   {
@@ -107,20 +107,65 @@ const testUsers = [
 
 const testMenuItems = [
   {
-    name: 'Chicken Sandwich',
-    description: 'Grilled chicken with lettuce and mayo',
-    price: 120,
-    category: 'Sandwiches',
-    imageUrl: '/images/chicken-sandwich.jpg',
-    available: true,
-    preparationTime: 10
+    "name": "Chicken Sandwich",
+    "description": "Grilled chicken with lettuce and mayo",
+    "price": 120,
+    "category": "Sandwiches",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ0UAQ1sShM_zdSUQpZ2RrEyqcRvQYvfsr5w&s",
+    "available": true,
+    "preparationTime": 10
+  },
+  {
+    "name": "Veggie Delight",
+    "description": "Fresh vegetables with cheese and pesto",
+    "price": 90,
+    "category": "Sandwiches",
+    "imageUrl": "https://s.lightorangebean.com/media/20240914161537/Ultimate-Veggie-Delight-Sandwich_-done.png",
+    "available": true,
+    "preparationTime": 5
+  },
+  {
+    "name": "Club Sandwich",
+    "description": "Chicken, bacon, lettuce, tomato, and mayo",
+    "price": 150,
+    "category": "Sandwiches",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYuf5Tsqs6eSmBDJhKuIcqZVqa59g52hQilQ&s",
+    "available": true,
+    "preparationTime": 15
+  },
+  {
+    "name": "Turkey and Swiss",
+    "description": "Sliced turkey, Swiss cheese, lettuce, and mustard",
+    "price": 110,
+    "category": "Sandwiches",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa43rnwepU0w0Qmr0RvBYNeW1EkGeEomFMWw&s",
+    "available": true,
+    "preparationTime": 8
+  },
+  {
+    "name": "Egg and Cheese",
+    "description": "Fried egg, cheese, and your choice of bread",
+    "price": 80,
+    "category": "Sandwiches",
+    "imageUrl": "https://marleysmenu.com/wp-content/uploads/2023/11/Epic-Egg-and-Cheese-Sandwich-Hero-Image.jpg",
+    "available": true,
+    "preparationTime": 7
+  },
+  {
+    "name": "Peanut Butter and Jelly",
+    "description": "Peanut butter and your choice of jelly",
+    "price": 60,
+    "category": "Sandwiches",
+    "imageUrl": "https://www.allrecipes.com/thmb/SpLbvOKqRtr6U3iodmNcJ5FgnAw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/49943-grilled-peanut-butter-and-jelly-sandwich-4x3-0309-085648b2dc5f421da0fbef9292a89ff0.jpg",
+    "available": true,
+    "preparationTime": 5
   },
   {
     name: 'Veg Burger',
     description: 'Mixed vegetable patty with cheese',
     price: 100,
     category: 'Burgers',
-    imageUrl: '/images/veg-burger.jpg',
+    imageUrl: 'https://www.vegrecipesofindia.com/wp-content/uploads/2020/12/burger-recipe-1.jpg',
     available: true,
     preparationTime: 8
   },
@@ -129,7 +174,7 @@ const testMenuItems = [
     description: 'Crispy potato fries with seasoning',
     price: 80,
     category: 'Sides',
-    imageUrl: '/images/fries.jpg',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTbeY-mFwWrb7R7ZV3yFBtMKeZB3XzM6Aog&s',
     available: true,
     preparationTime: 5
   },
@@ -138,7 +183,7 @@ const testMenuItems = [
     description: 'Creamy cold coffee with ice cream',
     price: 70,
     category: 'Beverages',
-    imageUrl: '/images/cold-coffee.jpg',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1VElUwmNTMaU-R3990XJMlO0a1yE4SmqYxQ&s',
     available: true,
     preparationTime: 3
   }
@@ -149,12 +194,12 @@ async function initializeDatabase() {
   try {
     // Clear existing data
     await User.deleteMany({});
-    await MenuItem.deleteMany({});
+    await Menu.deleteMany({});
     await Order.deleteMany({});
 
     // Insert test data
     const users = await User.insertMany(testUsers);
-    const menuItems = await MenuItem.insertMany(testMenuItems);
+    const menuItems = await Menu.insertMany(testMenuItems);
 
     // Create a sample order
     const sampleOrder = {
