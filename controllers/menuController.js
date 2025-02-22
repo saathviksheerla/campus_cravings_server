@@ -22,6 +22,52 @@ class MenuController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  static async updateMenuItem(req, res) {
+    try {
+      const { itemId } = req.params;
+      
+      // Verify admin role
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      const menuItem = await Menu.findByIdAndUpdate(
+        itemId,
+        { ...req.body, updatedAt: new Date() },
+        { new: true }
+      );
+
+      if (!menuItem) {
+        return res.status(404).json({ error: 'Menu item not found' });
+      }
+
+      res.json(menuItem);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  static async deleteMenuItem(req, res) {
+    try {
+      const { itemId } = req.params;
+      
+      // Verify admin role
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      const menuItem = await Menu.findByIdAndDelete(itemId);
+
+      if (!menuItem) {
+        return res.status(404).json({ error: 'Menu item not found' });
+      }
+
+      res.json({ message: 'Menu item deleted successfully' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = MenuController;

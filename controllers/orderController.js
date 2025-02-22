@@ -48,6 +48,51 @@ class OrderController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  static async getAdminOrders(req, res) {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+      
+      const orders = await Order.find()
+        .populate('userId', 'name email collegeId')
+        .sort({ orderDate: -1 });
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async updateOrderStatus(req, res) {
+    try {
+      const { orderId } = req.params;
+      const { status } = req.body;
+      
+      // Verify admin role
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      // Update order status and set completion time if completed
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        { 
+          status,
+          ...(status === 'completed' ? { completionTime: new Date() } : {})
+        },
+        { new: true }
+      );
+
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+
+      res.json(order);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = OrderController;
