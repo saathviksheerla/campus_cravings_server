@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/canteen_app', {
+mongoose.connect('mongodb://localhost:27017/college_cravings', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phone: { type: String },
   collegeId: { type: String, unique: true },
-  role: { type: String, enum: ['student', 'staff', 'admin'], default: 'student' },
+  role: { type: String, enum: ['client', 'admin'], default: 'client' },
   password: { type: String, required: true },
   balance: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
@@ -38,7 +38,7 @@ const orderSchema = new mongoose.Schema({
     menuItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
-    name: { type: String, required: true } // Denormalized for order history
+    name: { type: String, required: true }
   }],
   totalAmount: { type: Number, required: true },
   status: {
@@ -72,16 +72,16 @@ const testUsers = [
     email: 'ram@clg.edu',
     phone: '1234567890',
     collegeId: 'STU001',
-    role: 'student',
+    role: 'client',
     password: '1234', // In real app, use bcrypt
     balance: 500
   },
   {
-    name: 'Jane Student',
+    name: 'Jane Doe',
     email: 'jane@college.edu',
     phone: '1234567891',
     collegeId: 'STU002',
-    role: 'student',
+    role: 'client',
     password: 'hashedpassword123',
     balance: 750
   },
@@ -91,15 +91,6 @@ const testUsers = [
     phone: '9876543210',
     collegeId: 'ADM001',
     role: 'admin',
-    password: 'hashedpassword123',
-    balance: 0
-  },
-  {
-    name: 'Staff Member',
-    email: 'staff@college.edu',
-    phone: '9876543211',
-    collegeId: 'STF001',
-    role: 'staff',
     password: 'hashedpassword123',
     balance: 0
   }
