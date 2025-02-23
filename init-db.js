@@ -98,15 +98,6 @@ const testUsers = [
 
 const testMenuItems = [
   {
-    "name": "Chicken Sandwich",
-    "description": "Grilled chicken with lettuce and mayo",
-    "price": 120,
-    "category": "Sandwiches",
-    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ0UAQ1sShM_zdSUQpZ2RrEyqcRvQYvfsr5w&s",
-    "available": true,
-    "preparationTime": 10
-  },
-  {
     "name": "Veggie Delight",
     "description": "Fresh vegetables with cheese and pesto",
     "price": 90,
