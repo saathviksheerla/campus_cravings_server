@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',  // Local development
   'http://localhost:3002',
-  'https://college-cravings-ui.vercel.app' // Frontend domain
+  'https://campuscravings.vercel.app' // Frontend domain
 ];
 
 app.use(cors({
