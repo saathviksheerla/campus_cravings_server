@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 class AuthController {
   static async register(req, res) {
     try {
-      const { name, email, password, collegeId } = req.body;
+      const { name, email, password } = req.body;
 
       const emailExists = await User.findOne({ email });
       if (emailExists) {
@@ -20,7 +20,6 @@ class AuthController {
         name,
         email,
         password: hashedPassword,
-        collegeId,
         role: 'client'
       });
 
@@ -36,7 +35,6 @@ class AuthController {
           name: user.name,
           email: user.email,
           role: user.role,
-          collegeId: user.collegeId
         }
       });
     } catch (error) {
@@ -70,7 +68,6 @@ class AuthController {
           name: user.name,
           email: user.email,
           role: user.role,
-          collegeId: user.collegeId
         }
       });
     } catch (error) {
