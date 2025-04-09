@@ -56,7 +56,7 @@ class OrderController {
       }
       
       const orders = await Order.find()
-        .populate('userId', 'name email collegeId')
+        .populate('userId', 'name email')
         .sort({ orderDate: -1 });
       res.json(orders);
     } catch (error) {
