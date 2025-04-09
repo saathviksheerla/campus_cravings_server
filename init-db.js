@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String },
-  collegeId: { type: String, unique: true },
   role: { type: String, enum: ['client', 'admin'], default: 'client' },
   password: { type: String, required: true },
   balance: { type: Number, default: 0 },
@@ -75,7 +74,6 @@ const orderSchema = new mongoose.Schema({
 
 // Create indexes
 userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ collegeId: 1 }, { unique: true });
 menuItemSchema.index({ category: 1 });
 orderSchema.index({ userId: 1 });
 orderSchema.index({ status: 1 });
@@ -92,7 +90,6 @@ const testUsers = [
     name: 'ram',
     email: 'ram@clg.edu',
     phone: '1234567890',
-    collegeId: 'STU001',
     role: 'client',
     password: '1234', // In real app, use bcrypt
     balance: 500
@@ -101,7 +98,6 @@ const testUsers = [
     name: 'Jane Doe',
     email: 'jane@college.edu',
     phone: '1234567891',
-    collegeId: 'STU002',
     role: 'client',
     password: 'hashedpassword123',
     balance: 750
@@ -110,7 +106,6 @@ const testUsers = [
     name: 'Admin User',
     email: 'admin@college.edu',
     phone: '9876543210',
-    collegeId: 'ADM001',
     role: 'admin',
     password: 'hashedpassword123',
     balance: 0
