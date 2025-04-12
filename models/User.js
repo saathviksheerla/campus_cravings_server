@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String },
+  isPhoneVerified: { type: Boolean, default: false },
   role: { type: String, enum: ['client', 'admin'], default: 'client' },
   googleId: { type: String },
   password: { type: String }, // No longer required for Google auth

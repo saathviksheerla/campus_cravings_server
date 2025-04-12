@@ -8,6 +8,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const menuRoutes = require('./routes/menu');
 const orderRoutes = require('./routes/orders');
+const userRoutes = require('./routes/user'); // User routes for phone verification
 
 const app = express();
 
@@ -63,6 +64,8 @@ mongoose.connect(process.env.MONGODB_ATLAS_URI, {
 app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/phone', userRoutes);
+app.use('/api/user', userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
