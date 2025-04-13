@@ -36,6 +36,8 @@ class GoogleAuthController {
           _id: user._id,
           name: user.name,
           email: user.email,
+          phone: user.phone,
+          isPhoneVerified: user.isPhoneVerified,
           role: user.role,
         }
       });
