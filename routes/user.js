@@ -12,5 +12,6 @@ router.get('/status', authenticateToken, UserController.checkStatus);
 // Profile routes
 router.get('/profile', authenticateToken, UserController.getProfile);
 router.post('/update-username', authenticateToken, UserController.updateUsername);
-
+// routes/user.js - Add this route
+router.post('/fcm-token', authenticateToken, UserController.saveFCMToken);
 module.exports = router;

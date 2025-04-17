@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['client', 'admin'], default: 'client' },
   googleId: { type: String },
   password: { type: String }, // No longer required for Google auth
+  fcmTokens: [{ type: String, default: null }], // Array to store multiple device tokens
   balance: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });

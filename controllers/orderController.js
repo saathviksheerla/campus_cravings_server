@@ -1,6 +1,7 @@
-// controllers/orderController.js
+// controllers/orderController.js - modified version
 const Order = require('../models/Order');
 const Menu = require('../models/Menu');
+const NotificationService = require('../services/notificationService');
 
 class OrderController {
 
@@ -33,7 +34,8 @@ class OrderController {
         };
       }));
 
-      const pickupCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+      const pickupCode = Math.floor(100000 + Math.random() * 900000); // Always 6 digits
+
 
       const order = await Order.create({
         userId: req.user._id,
@@ -42,6 +44,18 @@ class OrderController {
         pickupCode,
         status: 'pending'
       });
+
+      // Send notification for order creation
+      await NotificationService.sendOrderNotification(
+        req.user._id,
+        'Order Received',
+        `Your order #${pickupCode} has been received and is being processed.`,
+        { 
+          orderId: order._id.toString(),
+          status: 'pending',
+          pickupCode
+        }
+      );
 
       res.status(201).json(order);
     } catch (error) {
@@ -87,6 +101,42 @@ class OrderController {
       if (!order) {
         return res.status(404).json({ error: 'Order not found' });
       }
+
+      // Get notification message based on status
+      let title, message;
+      switch (status) {
+        case 'confirmed':
+          title = 'Order Confirmed';
+          message = `Your order #${order.pickupCode} has been confirmed and will be prepared soon.`;
+          break;
+        case 'ready':
+          title = 'Order Ready for Pickup';
+          message = `Your order #${order.pickupCode} is ready! Please come to the counter.`;
+          break;
+        case 'completed':
+          title = 'Order Completed';
+          message = `Thank you for picking up your order #${order.pickupCode}. Enjoy your meal!`;
+          break;
+        case 'cancelled':
+          title = 'Order Cancelled';
+          message = `Your order #${order.pickupCode} has been cancelled.`;
+          break;
+        default:
+          title = 'Order Update';
+          message = `Your order #${order.pickupCode} status: ${status}`;
+      }
+
+      // Send notification
+      await NotificationService.sendOrderNotification(
+        order.userId,
+        title,
+        message,
+        { 
+          orderId: order._id.toString(),
+          status,
+          pickupCode: order.pickupCode
+        }
+      );
 
       res.json(order);
     } catch (error) {
