@@ -1,5 +1,7 @@
 // controllers/userController.js
 const User = require('../models/User');
+const NotificationService = require('../services/notificationService');
+
 
 class UserController {
   // Update user phone number
@@ -111,6 +113,28 @@ class UserController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  // controllers/userController.js - Add this method
+static async saveFCMToken(req, res) {
+  try {
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required' });
+    }
+    
+    const result = await NotificationService.saveUserToken(req.user._id, token);
+    console.log("result = ", result);
+    if (result) {
+      res.status(200).json({ message: 'Token saved successfully' });
+    } else {
+      res.status(500).json({ error: 'Failed to save token' });
+    }
+  } catch (error) {
+    console.log("Error in Cath line 132");
+    res.status(500).json({ error: error.message });
+  }
+}
 }
 
 module.exports = UserController;
