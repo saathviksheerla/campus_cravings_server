@@ -25,14 +25,20 @@ class NotificationService {
         return false;
       }
       
+      // Convert all data values to strings
+      const stringifiedData = {};
+      Object.keys(data).forEach(key => {
+        stringifiedData[key] = String(data[key]);
+      });
+      
       const message = {
         notification: {
           title,
           body,
         },
         data: {
-          ...data,
-          click_action: 'FLUTTER_NOTIFICATION_CLICK', // This helps with handling the notification on click
+          ...stringifiedData,
+          click_action: 'FLUTTER_NOTIFICATION_CLICK',
         },
       };
       
@@ -73,7 +79,6 @@ class NotificationService {
   static async saveUserToken(userId, token) {
     try {
       // Add token if it doesn't exist
-      console.log("try block line 76");
       console.log("userId: ", userId);
       console.log("token: ", token);
       
