@@ -1,4 +1,4 @@
-// models/User.js - modified version
+// models/User.js
 const mongoose = require('mongoose');
 
 // User Schema

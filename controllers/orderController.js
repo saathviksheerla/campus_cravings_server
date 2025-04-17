@@ -109,10 +109,6 @@ class OrderController {
           title = 'Order Confirmed';
           message = `Your order #${order.pickupCode} has been confirmed and will be prepared soon.`;
           break;
-        case 'preparing':
-          title = 'Order Preparation Started';
-          message = `We've started preparing your order #${order.pickupCode}.`;
-          break;
         case 'ready':
           title = 'Order Ready for Pickup';
           message = `Your order #${order.pickupCode} is ready! Please come to the counter.`;
