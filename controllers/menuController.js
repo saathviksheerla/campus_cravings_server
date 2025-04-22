@@ -11,6 +11,14 @@ class MenuController {
     }
   }
 
+  static async getCategories(req, res) {
+    try {
+      res.json(Menu.CATEGORIES);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   static async createMenuItem(req, res) {
     try {
       if (req.user.role !== 'admin') {
