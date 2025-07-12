@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const menuRoutes = require('./routes/menu');
 const orderRoutes = require('./routes/orders');
 const userRoutes = require('./routes/user'); // User routes for phone verification
+const collegeRoutes = require('./routes/college'); // college routes
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/phone', userRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/college', collegeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

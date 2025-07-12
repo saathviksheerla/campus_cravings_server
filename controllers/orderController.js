@@ -17,7 +17,7 @@ class OrderController {
 
   static async createOrder(req, res) {
     try {
-      const { items } = req.body;
+      const { items, collegeId } = req.body;
       let totalAmount = 0;
       
       const orderItems = await Promise.all(items.map(async (item) => {
@@ -42,7 +42,8 @@ class OrderController {
         items: orderItems,
         totalAmount,
         pickupCode,
-        status: 'pending'
+        status: 'pending',
+        collegeId
       });
 
       // Send notification for order creation
