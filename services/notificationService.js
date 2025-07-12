@@ -79,8 +79,8 @@ class NotificationService {
   static async saveUserToken(userId, token) {
     try {
       // Add token if it doesn't exist
-      console.log("userId: ", userId);
-      console.log("token: ", token);
+      //console.log("userId: ", userId);
+      //console.log("token: ", token);
       
       await User.findByIdAndUpdate(userId, {
         $addToSet: { fcmTokens: token } // $addToSet prevents duplicates
