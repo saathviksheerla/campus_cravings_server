@@ -124,7 +124,6 @@ static async saveFCMToken(req, res) {
     }
     
     const result = await NotificationService.saveUserToken(req.user._id, token);
-    console.log("result = ", result);
     if (result) {
       res.status(200).json({ message: 'Token saved successfully' });
     } else {

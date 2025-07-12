@@ -27,6 +27,7 @@ const menuItemSchema = new mongoose.Schema({
   imageUrl: { type: String },
   available: { type: Boolean, default: true },
   preparationTime: { type: Number },
+  collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College', required: true }, // New field
   updatedAt: { type: Date, default: Date.now }
 });
 
@@ -34,6 +35,7 @@ const menuItemSchema = new mongoose.Schema({
 menuItemSchema.statics.CATEGORIES = CATEGORIES;
 
 menuItemSchema.index({ category: 1 });
+menuItemSchema.index({ collegeId: 1 }); // New index for college-based queries
 
 const Menu = mongoose.model('Menu', menuItemSchema);
 
