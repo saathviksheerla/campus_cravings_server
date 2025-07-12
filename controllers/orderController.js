@@ -7,8 +7,10 @@ class OrderController {
 
   static async getOrders(req, res) {
     try {
-      const orders = await Order.find({ userId: req.user._id })
+      const { collegeId } = req.body;
+      const orders = await Order.find({ userId: req.user._id, collegeId})
         .sort({ orderDate: -1 }); // Most recent first
+        console.log(req.body);
       res.json(orders);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -45,6 +47,7 @@ class OrderController {
         status: 'pending',
         collegeId
       });
+      console.log('order: ', order);
 
       // Send notification for order creation
       await NotificationService.sendOrderNotification(
@@ -66,11 +69,12 @@ class OrderController {
 
   static async getAdminOrders(req, res) {
     try {
+      const {collegeId} = req.body;
       if (req.user.role !== 'admin') {
         return res.status(403).json({ error: 'Unauthorized' });
       }
-      
-      const orders = await Order.find()
+
+      const orders = await Order.find({collegeId})
         .populate('userId', 'name email')
         .sort({ orderDate: -1 });
       res.json(orders);
