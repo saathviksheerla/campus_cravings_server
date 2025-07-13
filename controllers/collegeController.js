@@ -27,6 +27,10 @@ class CollegeController {
         return res.status(400).json({ error: 'College ID is required' });
       }
 
+      if(req.user.role === 'admin'){
+        return res.status(403).json({error: 'Admins are not allowed to switch colleges'});
+      }
+
       // Verify college exists and is active
       const college = await College.findOne({ _id: collegeId, isActive: true });
       if (!college) {
