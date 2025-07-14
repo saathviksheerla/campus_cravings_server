@@ -74,8 +74,10 @@ class OrderController {
         return res.status(403).json({ error: 'Unauthorized' });
       }
 
+      console.log(collegeId);
+
       const orders = await Order.find({collegeId})
-        .populate('userId', 'name email')
+        .populate('userId', 'name email phone')
         .sort({ orderDate: -1 });
       res.json(orders);
     } catch (error) {
